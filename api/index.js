@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import ZZZModel from "../server/models/ZZZ";
 
+const ZZZModel = require("../server/models/ZZZ");
+
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true

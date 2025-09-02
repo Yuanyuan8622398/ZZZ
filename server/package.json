@@ -11,8 +11,9 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon index.js"
+    "dev": "nodemon index.js",             
+    "start": "node index.js",              
+    "vercel-build": "echo 'Vercel build step' && exit 0"  
   },
   "keywords": [],
   "author": "",

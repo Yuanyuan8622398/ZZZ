@@ -1,30 +1,41 @@
-import mongoose from "mongoose";
-import ZZZModel from "../server/models/ZZZ";
-
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const ZZZModel = require("../server/models/ZZZ");
+const serverless = require("serverless-http");
+
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
-export default async function handler(req, res) {
-    if (req.method === "POST") {
-        const { email, password, name } = req.body;
-
-        if (req.url.includes("/login")) {
-            const user = await ZZZModel.findOne({ email });
-            if (!user) return res.json("Cannot find your email");
-            if (user.password === password) {
-                res.json("Success");
-            } else {
-                res.json("The password is incorrect");
-            }
-        } else if (req.url.includes("/register")) {
-            const zzz = await ZZZModel.create({ name, email, password });
-            res.json(zzz);
-        }
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await ZZZModel.findOne({ email });
+    if (!user) return res.json("Cannot find your email");
+    if (user.password === password) {
+      res.json("Success");
     } else {
-        res.status(405).json({ message: "Method not allowed" });
+      res.json("The password is incorrect");
     }
-}
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+app.post('/register', async (req, res) => {
+  try {
+    const zzz = await ZZZModel.create(req.body);
+    res.json(zzz);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = app;
+module.exports.handler = serverless(app);

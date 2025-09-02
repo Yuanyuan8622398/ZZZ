@@ -6,6 +6,4 @@ const ZZZSchema = new mongoose.Schema({
     password : String
 })
 
-const ZZZModel = mongoose.model("zzz", ZZZSchema)
-
-module.exports = ZZZModel
+module.exports = mongoose.model("ZZZ", ZZZSchema);
